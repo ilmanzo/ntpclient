@@ -30,8 +30,11 @@ void main()
     auto sock=new UdpSocket(AddressFamily.INET);
     Packet packet;  // stack allocation
     sock.connect(new InternetAddress("europe.pool.ntp.org",123));
-    sock.send((&packet)[0..1]);
-    sock.receive((&packet)[0..1]);
+    const sent=sock.send((&packet)[0..1]);
+    const received=sock.receive((&packet)[0..1]);
+    if (sent!=Packet.sizeof || received!=Packet.sizeof) {
+        writeln("Hmmm .. Something went wrong");
+    }
     sock.close();
     auto unixTime=bigEndianToNative!uint(packet.recv_ts_secs); // network byte order is Big-Endian
     auto stdTime = SysTime.fromUnixTime(unixTime-ntpEpochOffset); // NTP returns seconds from Jan 1, 1900
