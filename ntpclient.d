@@ -6,7 +6,7 @@ import std.bitmanip;
 // from reference
 struct Packet {
     align(1):		  // we want the structure packed, with no gaps
-	  byte flags=0x23;  // Flags 00|100|011 for li=0, vn=4, mode=3
+    byte flags=0x23;  // Flags 00|100|011 for li=0, vn=4, mode=3
     byte stratum;
     byte poll;
     byte precision;
@@ -33,7 +33,7 @@ void main()
     sock.send((&packet)[0..1]);
     sock.receive((&packet)[0..1]);
     sock.close();
-	  auto unixTime=bigEndianToNative!uint(packet.recv_ts_secs); // network byte order is Big-Endian
+    auto unixTime=bigEndianToNative!uint(packet.recv_ts_secs); // network byte order is Big-Endian
     auto stdTime = SysTime.fromUnixTime(unixTime-ntpEpochOffset); // NTP returns seconds from Jan 1, 1900
     writeln("Hello, the time is: ",stdTime);
 }
